@@ -161,7 +161,7 @@ public class Game {
     private Snake snake;
     private Grid grid;
     private int direction;
-    private boolean gameOVer; 
+    private boolean gameOver; 
     
     public Game(Snake snake, Grid grid)
     {
