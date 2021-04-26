@@ -13,7 +13,7 @@ public class Snake {
     public Snake(Coordinate initCoor)
     {
         head = initCoor;
-        snakePartList.add(head);
+        snakeBodyList.add(head);
         head.setCoordinateType(CoordinateType.SNAKE);
     }
     
@@ -22,9 +22,9 @@ public class Snake {
         snakeBodyList.add(head);
     }
     
-    //"moves" the snake editing the body list and the head coordiante 
+    //"moves" the snake editing the body list and the head coordinate
     public void move(Coordinate nextCoordinate) {
-        Coordinte tail = snakeBodyList.removeLast();
+        Coordinate tail = snakeBodyList.removeLast();
         tail.setCoordinateType(CoordinateType.EMPTY);
  
         head = nextCoordinate;
@@ -33,9 +33,9 @@ public class Snake {
     }
     
     //checks to see if the next coordinate is apart of the snake itself
-    public void crash(Coordinate nextCoordinate) {
+    public boolean crash(Coordinate nextCoordinate) {
         for (Coordinate coordinate : snakeBodyList){
-            if (coordinate == nextCoordiante) {
+            if (coordinate == nextCoordinate) {
                 return true;
             }
         }
@@ -49,13 +49,13 @@ public class Snake {
     }
  
     //sets the snake body
-    public void setSnakeBodyList(LinkedList<Coordiante> snakeBodyList)
+    public void setSnakeBodyList(LinkedList<Coordinate> snakeBodyList)
     {
         this.snakeBodyList = snakeBodyList;
     }
  
     //gets snake head
-    public Coordiante getHead() { 
+    public Coordinate getHead() {
         return head; 
     }
  
@@ -111,18 +111,18 @@ public class Coordinate {
         SNAKE;
     }
 //the Grid class represents the game board, it is made of coordinates. 
-//has a method Food which randomly generates the postion of the food
+//has a method Food which randomly generates the position of the food
 public class Grid {
  
     final int Y_COUNT, X_COUNT;
     private Coordinate[][] coordinates;
  
-    public Grid(int yCount, int xCount)
+    public Game.Coordinate[][] Grid(int yCount, int xCount)
     {
         Y_COUNT = yCount;
         X_COUNT = xCount;
  
-        coordinates = new Coordin[Y_COUNT][X_COUNT];
+        coordinates = new Coordinate[Y_COUNT][X_COUNT];
         for (int y = 0; y < Y_COUNT; y++) {
             for (int x = 0; x < X_COUNT; x++) {
                 coordinates[y][x] = new Coordinate(y, x);
@@ -216,14 +216,13 @@ public class Game {
     {
         this.gameOver = gameOver;
     }
-    
+
     //the grid will need updates regularly
-    public void update();
-    {
+    public void update(){
         if (!gameOver){
             if (direction != DIRECTION_NONE) {
                 Coordinate nextCoordinate = getNextCoordinate(snake.getHead());
-                if (snake.checkCrash(nextCoordinate)) {
+                if (snake.crash(nextCoordinate)) {
                     setDirection(DIRECTION_NONE);
                     gameOver = true;
                 }
@@ -231,7 +230,7 @@ public class Game {
                     snake.move(nextCoordinate);
                     if (nextCoordinate.getCoordinateType() == CoordinateType.FOOD) {
                         snake.grow();
-                        grid.generateFood();
+                        grid.food();
                     }
                 }
             }
@@ -266,8 +265,8 @@ public class Game {
     public static class MainMenu {
         System.out.println("Start Game");
         
-        Coordinate initPos = new Coordinate(0, 0);
-        Snake initSnake = new Snake(initPos);
+        Coordinate initCoor = new Coordinate(0, 0);
+        Snake initSnake = new Snake(initCoor);
         Grid grid = new grid(20, 20);
         Game newGame = new Game(initSnake, grid);
         newGame.gameOver = false;
