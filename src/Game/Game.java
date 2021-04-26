@@ -2,6 +2,7 @@ package Game;
 
 //represents the snake; the snake has a body and a head
 //we use a Linked List to define the elements of our "collecion" (thanks again Prof. Huang)
+import java.util.Scanner;
 import java.util.LinkedList;
 
 public class Snake {
